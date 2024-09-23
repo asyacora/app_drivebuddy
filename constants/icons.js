@@ -11,12 +11,9 @@ import logout from "../assets/icons/logout.png";
 import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
-<<<<<<< HEAD
-=======
 import google from "../assets/icons/google.png";
 import facebook from "../assets/icons/facebook.png";
 import outlook from "../assets/icons/outlook.png";
->>>>>>> 48f2f3d (Auth ekranları eklendi)
 
 export default {
   play,
@@ -32,10 +29,7 @@ export default {
   logout,
   eyeHide,
   eye,
-<<<<<<< HEAD
-=======
   google,
   facebook,
   outlook,
->>>>>>> 48f2f3d (Auth ekranları eklendi)
 };

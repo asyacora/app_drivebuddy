@@ -1,20 +1,3 @@
-<<<<<<< HEAD
-import { Text, View } from 'react-native'
-import React from 'react'
-import { Link } from 'expo-router'
-
-const DriveBuddy = () => {
-  return (
-    <View className="flex-1 items-center justify-center">
-      <Text className="text-3xl font-pblack">Drive Buddy!</Text>
-      <Link href='/home' style={{color: 'blue'}}>Go to Home</Link>
-    </View>
-  )
-}
-
-export default DriveBuddy
-
-=======
 import { StyleSheet, Image, View, ScrollView } from 'react-native'
 import React from 'react'
 import CustomButton from '../components/CustomButton'
@@ -34,6 +17,13 @@ const DriveBuddy = () => {
           />
         </View>
         <View style={styles.buttonContainer}>
+          <CustomButton 
+            text="Go to Buddy" 
+            backgroundColor="#f1f1f1" 
+            textColor="#000000"
+            handlePress={() => router.push('/buddy')}
+            icon={<Image source={require('../assets/icons/facebook.png')} style={styles.facebookIcon} />}
+          />
           <CustomButton 
             text="Login with Apple" 
             backgroundColor="#f1f1f1" 
@@ -108,4 +98,3 @@ const styles = StyleSheet.create({
 })
 
 export default DriveBuddy
->>>>>>> 48f2f3d (Auth ekranları eklendi)

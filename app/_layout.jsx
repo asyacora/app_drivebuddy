@@ -36,14 +36,11 @@ const DriveBuddy = () => {
 
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
-<<<<<<< HEAD
-=======
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         {/* <Stack.Screen name="/search/[query]" options={{ headerShown: false }} />*/}
 
 
->>>>>>> 48f2f3d (Auth ekranları eklendi)
 
       </Stack>
   
