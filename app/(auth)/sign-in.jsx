@@ -1,10 +1,10 @@
-import { StyleSheet, Image, View, Text, ScrollView } from 'react-native'
+import { StyleSheet, Image, View, Text, ScrollView, KeyboardAvoidingView, Platform, Keyboard} from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import FormField from '../../components/FormField'
 import CustomButton from '../../components/CustomButton'
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router';
 
 const SignIn = () => {
 
@@ -14,16 +14,47 @@ const SignIn = () => {
   })
    
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter(); 
 
-  const submit = () => {
-    setIsSubmitting(true)
-    // Handle the sign-in logic here
-    setTimeout(() => setIsSubmitting(false), 2000) // Simulate loading for 2 seconds
-  }
+  const submit = async () => {
+    setIsSubmitting(true);
+    try {
+        const response = await fetch('http://192.168.1.67:8000/api/accounts/sign-in/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: form.username,
+                password: form.password,
+            }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log('Sign-in successful:', data.message);
+            // Navigate to the Buddy page if sign-up is successful
+            router.push('/buddy'); 
+        } else {
+            console.log('Sign-in error:', data.error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    } finally {
+        setIsSubmitting(false);
+    }
+};
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollView}>
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+      >
+        <ScrollView 
+          contentContainerStyle={styles.scrollView}
+          keyboardShouldPersistTaps='handled' // Ensure taps are handled while keyboard is open
+        >
         <View style={styles.container}>
           <Image 
             source={images.logo}
@@ -34,11 +65,11 @@ const SignIn = () => {
           </Text>
 
           <FormField
-            title="Email"
-            value={form.email}
-            handleChangeText={(e) => setForm({ ...form, email: e })}
+            title="Username"
+            value={form.username}
+            handleChangeText={(e) => setForm({ ...form, username: e })}
             otherStyles={styles.formField}
-            keyboardType="email-address"
+            autoCapitalize="none" 
           />
           <View style={{ height: 20 }} />
           <FormField
@@ -67,6 +98,7 @@ const SignIn = () => {
             
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }
@@ -80,14 +112,14 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 20, // Reduce the vertical padding to bring the content up
+    paddingVertical: 30, // Reduce the vertical padding to bring the content up
   },
   container: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center', // View içeriğini yatayda ortalar
     paddingHorizontal: 25,
-    paddingTop: -30, // Increase top padding to move content down a bit
+    paddingTop: 30, // Increase top padding to move content down a bit
   },
   logo: {
     width: 200,
@@ -102,8 +134,13 @@ const styles = StyleSheet.create({
   },
   formField: {
     marginBottom: 80,
-    width: '100%', // FormField genişliği %100 olacak
-  },
+    width: '100%', 
+    height: 50, // Adjust height as necessary
+    paddingVertical: 10, // Add padding for better visual
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+},
   button: {
     marginTop: 350, // Increase marginTop to move button down
     width: '100%', // Buton genişliği %100 olacak

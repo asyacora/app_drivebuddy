@@ -6,29 +6,38 @@ import Icon from 'react-native-vector-icons/FontAwesome'; // FontAwesome'dan mik
 import * as THREE from 'three';
 import vertexShader from '../vertexShader';
 import fragmentShader from '../fragmentShader';
+import { MathUtils } from "three";
 
 const AnimatedBlob = () => {
-  const meshRef = useRef();
+const mesh = useRef();
   const blobShaderMaterial = useMemo(() => new THREE.ShaderMaterial({
     uniforms: {
-      u_intensity: { value: 1.0 },
+      u_intensity: { value: 0.3 },
       u_time: { value: 0.0 },
+
     },
-    vertexShader,
-    fragmentShader,
+    vertexShader: vertexShader, 
+    fragmentShader: fragmentShader,
+    transparent: false,
   }), []);
 
-  useFrame(({ clock }) => {
-    if (meshRef.current) {
-      meshRef.current.material.uniforms.u_time.value = clock.getElapsedTime();
-      meshRef.current.rotation.x += 0.01;
-      meshRef.current.rotation.y += 0.01;
+  useFrame((state) => {
+    const { clock } = state;
+    if (mesh.current) {
+      mesh.current.material.uniforms.u_time.value =
+        0.6 * clock.getElapsedTime();
+
+      mesh.current.material.uniforms.u_intensity.value = MathUtils.lerp(
+        mesh.current.material.uniforms.u_intensity.value,
+       0.10,
+        0.1
+      );
     }
   });
 
   return (
-    <mesh ref={meshRef} material={blobShaderMaterial}>
-      <Sphere args={[1, 32, 32]} />
+    <mesh ref={mesh} material={blobShaderMaterial}>
+      <sphereGeometry args={[1, 35, 35]} />
     </mesh>
   );
 };
@@ -36,35 +45,33 @@ const AnimatedBlob = () => {
 export default function App() {
   return (
     <View style={styles.container}>
-      {/* Blob render edilen Canvas */}
-      <Canvas style={styles.canvas}>
+      <Canvas  style={styles.canvas}>
         <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
+        <pointLight position={[0, 0, 0]} intensity={1}/>
         <AnimatedBlob />
       </Canvas>
-
-
       <View style={styles.microphoneContainer}>
         <Icon name="microphone" size={40} color="#000" />
       </View>
     </View>
   );
 }
-
-// Stil dosyası
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
+    transform: [{ translateY: -130 }], // Move the container 30 units up
+    },
   canvas: {
     height: 300, 
     width: 300,
+    marginBottom: 30,
   },
   microphoneContainer: {
-    marginTop: -5,  
-    marginBottom: 10,
+    marginTop: 10,  
+    marginBottom: -15,
     justifyContent: 'center',
     alignItems: 'center',
   },

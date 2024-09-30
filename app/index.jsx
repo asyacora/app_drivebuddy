@@ -49,7 +49,7 @@ const DriveBuddy = () => {
             text="Login with Email" 
             backgroundColor="#f1f1f1" 
             textColor="#000000"
-            handlePress={() => alert('Email Login')}
+            handlePress={() => router.push('/sign-in')}
             icon={<Image source={require('../assets/icons/outlook.png')} style={styles.outlookIcon} />}
           />
         </View>

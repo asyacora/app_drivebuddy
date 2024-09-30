@@ -15,8 +15,10 @@ const FormField = ({ title, value, placeholder, handleChangeText, otherStyles, .
           placeholder={placeholder}
           placeholderTextColor="#7b7b8b"
           onChangeText={handleChangeText}
-          secureTextEntry={title === 'Password' && !showPassword} // toggle secureTextEntry based on showPassword
-         
+          secureTextEntry={title === 'Password' && !showPassword}
+          textContentType={title === 'Username' ? 'username' : 'password'}
+          keyboardType={title === 'Email' ? 'email-address' : 'default'}
+           
         />
 
         {title === 'Password' && (
